@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  release:
+    types:
+      - created
+  workflow_dispatch:
+
+jobs:
+  backend:
+    name: "Deploy backend"
+    runs-on: ubuntu-latest
+    env:
+      DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+      DIGITALOCEAN_APP_ID: ${{ secrets.DIGITALOCEAN_APP_ID }}
+    steps:
+      - name: Trigger API Deployment
+        run: |
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -H "Authorization: Bearer $DIGITALOCEAN_TOKEN" \
+          "https://api.digitalocean.com/v2/apps/$DIGITALOCEAN_APP_ID/deployments"

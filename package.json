@@ -1,0 +1,70 @@
+{
+  "name": "imss-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:gokberkakdeniz/iztech-ceng316-api.git",
+  "author": "Gökberk AKDENİZ <gokberkakdeniz@hotmail.com>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "nodemon",
+    "build": "tsc",
+    "serve": "nodemon",
+    "mikro-orm": "mikro-orm",
+    "lint": "eslint src/**/*.ts",
+    "format": "eslint src/**/*.ts --fix"
+  },
+  "mikro-orm": {
+    "useTsNode": true,
+    "configPaths": [
+      "./src/mikro-orm.config.ts"
+    ]
+  },
+  "dependencies": {
+    "@mikro-orm/core": "^4.5.2",
+    "@mikro-orm/mariadb": "^4.5.2",
+    "@mikro-orm/nestjs": "^4.2.0",
+    "@mikro-orm/reflection": "^4.5.3",
+    "@nestjs/common": "^7.0.0",
+    "@nestjs/core": "^7.0.0",
+    "@nestjs/jwt": "^7.2.0",
+    "@nestjs/passport": "^7.1.5",
+    "@nestjs/platform-express": "^7.0.0",
+    "@nestjs/swagger": "^4.8.0",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^6.6.7",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "@mikro-orm/cli": "^4.5.2",
+    "@nestjs/schematics": "^7.0.0",
+    "@nestjs/testing": "^7.0.0",
+    "@types/jest": "26.0.8",
+    "@types/node": "14.14.33",
+    "@types/passport-jwt": "^3.0.5",
+    "@types/passport-local": "^1.0.33",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "dotenv": "8.2.0",
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-plugin-cypress": "^2.10.3",
+    "eslint-plugin-import": "2.22.1",
+    "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-jsx-a11y": "6.4.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "7.21.5",
+    "eslint-plugin-react-hooks": "4.2.0",
+    "jest": "26.2.2",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "vercel": "^21.3.3"
+  }
+}
