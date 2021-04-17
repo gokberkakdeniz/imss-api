@@ -39,6 +39,7 @@ testem.log
 Thumbs.db
 
 .vercel
+temp
 
 # Environment Files
 .local.env

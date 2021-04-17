@@ -1,11 +1,5 @@
 import { SISBRole } from "../../external-services/obs-bridge";
-import {
-  Entity,
-  ManyToOne,
-  OneToOne,
-  PrimaryKey,
-  Property,
-} from "@mikro-orm/core";
+import { Entity, ManyToOne, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { FormField } from "./FormField";
 
 @Entity()

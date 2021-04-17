@@ -17,10 +17,7 @@ export interface SISBResult<T> {
 export type SISBUserResult = SISBResult<Omit<SISBUser, "password">>;
 
 export interface StudentInformationSystemBridge {
-  getUserByCrediantals: (
-    username: string,
-    password: string
-  ) => Promise<SISBUserResult>;
+  getUserByCrediantals: (username: string, password: string) => Promise<SISBUserResult>;
 
   getUserById: (userId: number) => Promise<SISBUserResult>;
 }

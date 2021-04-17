@@ -10,10 +10,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     super();
   }
 
-  async validate(
-    username: string,
-    password: string
-  ): Promise<SISBUserResult["data"]> {
+  async validate(username: string, password: string): Promise<SISBUserResult["data"]> {
     const result = await this.authService.validateUser(username, password);
 
     if (!result.success) {

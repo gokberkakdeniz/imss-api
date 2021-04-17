@@ -8,9 +8,8 @@ module.exports = {
   },
   extends: [
     "plugin:prettier/recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
-    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
     "plugin:jest/recommended",
   ],
   env: {
@@ -20,5 +19,14 @@ module.exports = {
   },
   rules: {
     "prettier/prettier": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        argsIgnorePattern: "^_",
+        caughtErrorsIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+      },
+    ],
   },
 };
