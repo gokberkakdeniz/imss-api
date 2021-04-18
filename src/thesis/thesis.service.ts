@@ -19,7 +19,6 @@ export class ThesisService {
 
     const student = await this.studentsRepo.findOne({ id: userId });
     const advisor = await this.academiciansRepo.findOne({ id: advisor_id });
-    console.log(student, advisor);
 
     const proposal = new ThesisTopicProposal(title, description, student, advisor);
 

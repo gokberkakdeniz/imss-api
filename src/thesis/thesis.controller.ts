@@ -13,8 +13,6 @@ export class ThesisController {
   @ApiOperation({ summary: "Create new thesis" })
   @ApiBody({ type: CreateThesisRequest })
   create(@Body() body: CreateThesisRequest, @Req() req): any {
-    console.log(req.user);
-
     return this.thesisService.create(req.user.id, body);
   }
 
