@@ -11,7 +11,7 @@ export class TSS {
   date: Date;
 
   @Property()
-  plagirsm_rate: number;
+  plagiarism_rate: number;
 
   @OneToOne()
   student!: Student;

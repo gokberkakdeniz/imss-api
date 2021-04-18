@@ -9,7 +9,7 @@ export class Academician {
   id!: number;
 
   @Property()
-  obs_user_id: string;
+  obs_user_id: number;
 
   @OneToMany(() => Student, (student) => student.advisor)
   advised_students = new Collection<Student>(this);
