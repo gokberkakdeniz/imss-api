@@ -10,7 +10,7 @@ export class Student {
   id!: number;
 
   @Property()
-  obs_user_id: number;
+  obs_user_id!: number;
 
   @Property()
   step_no: number;

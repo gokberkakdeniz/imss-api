@@ -97,6 +97,14 @@ const users: SISBUser[] = [
     name: "IM",
     surname: "2",
   },
+  {
+    id: 13,
+    username: "t",
+    password: "t",
+    role: "STUDENT",
+    name: "api test account",
+    surname: "swagger",
+  },
 ];
 
 export default users;

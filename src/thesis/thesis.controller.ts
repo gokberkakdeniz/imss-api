@@ -1,14 +1,21 @@
-import { Controller, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req } from "@nestjs/common";
+import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { CreateThesisRequest } from "./dto/create-thesis";
+import { ThesisService } from "./thesis.service";
 
 @ApiTags("theses")
 @ApiBearerAuth()
 @Controller("theses")
 export class ThesisController {
+  constructor(private thesisService: ThesisService) {}
+
   @Post()
   @ApiOperation({ summary: "Create new thesis" })
-  create(): string {
-    return "create";
+  @ApiBody({ type: CreateThesisRequest })
+  create(@Body() body: CreateThesisRequest, @Req() req): any {
+    console.log(req.user);
+
+    return this.thesisService.create(req.user.id, body);
   }
 
   @Get()

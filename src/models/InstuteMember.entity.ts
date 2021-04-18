@@ -7,7 +7,7 @@ export class InstuteMember {
   id!: number;
 
   @Property()
-  obs_user_id: number;
+  obs_user_id!: number;
 
   @Property()
   role: string;

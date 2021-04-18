@@ -18,4 +18,13 @@ export class ThesisTopicProposal {
 
   @ManyToOne()
   advisor!: Academician;
+
+  // TODO: acceptance/rejection field
+
+  constructor(title: string, description: string, student: Student, advisor: Academician) {
+    this.title = title;
+    this.description = description;
+    this.student = student;
+    this.advisor = advisor;
+  }
 }
