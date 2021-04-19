@@ -5,6 +5,7 @@ import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { ThesisTopicProposal } from "../models/ThesisTopicProposal.entity";
 import { CreateThesisRequest } from "./dto/create-thesis";
+import { UpdateThesisRequest } from "./dto/update-thesis";
 
 @Injectable()
 export class ThesisService {
@@ -28,8 +29,10 @@ export class ThesisService {
     return proposal;
   }
 
-  getAll(): string {
-    return `getAll()`;
+  async getAll(): Promise<ThesisTopicProposal[]> {
+    const tpp = await this.thesesRepo.findAll();
+
+    return tpp;
   }
 
   async getOne(id: number): Promise<ThesisTopicProposal> {
@@ -38,7 +41,19 @@ export class ThesisService {
     return tpp;
   }
 
-  updateOne(id: string): string {
-    return `updateOne(${id})`;
+  async updateOne(id: number, data: UpdateThesisRequest): Promise<ThesisTopicProposal> {
+    const tpp = await this.thesesRepo.findOne({ id });
+
+    if (data.title) {
+      tpp.title = data.title;
+    }
+
+    if (data.description) {
+      tpp.description = data.description;
+    }
+
+    this.thesesRepo.flush();
+
+    return tpp;
   }
 }

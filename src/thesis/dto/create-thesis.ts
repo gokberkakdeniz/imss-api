@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsPositive, MaxLength, MinLength } from "class-validator";
-import { ThesisTopicProposal } from "../../models/ThesisTopicProposal.entity";
+import { ThesisTopicProposalDto } from "./thesis";
 
 export class CreateThesisRequest {
   @ApiProperty()
@@ -20,5 +20,5 @@ export class CreateThesisRequest {
 
 export class CreateThesisResponse {
   @ApiProperty()
-  thesis: ThesisTopicProposal;
+  thesis: ThesisTopicProposalDto;
 }

@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { ThesisTopicProposal } from "../../models/ThesisTopicProposal.entity";
+import { ThesisTopicProposalDto } from "./thesis";
 
 export class GetThesisResponse {
   @ApiProperty()
-  thesis: ThesisTopicProposal;
+  thesis: ThesisTopicProposalDto;
 }
