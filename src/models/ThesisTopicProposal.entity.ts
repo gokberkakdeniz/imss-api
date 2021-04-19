@@ -1,6 +1,12 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Entity, Enum, ManyToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { Academician } from "./Academician.entity";
 import { Student } from "./Student.entity";
+
+export enum ThesisTopicProposalState {
+  WAITING = 0,
+  ACCEPTED = 1,
+  REJECTED = 2,
+}
 
 @Entity()
 export class ThesisTopicProposal {
@@ -19,7 +25,8 @@ export class ThesisTopicProposal {
   @ManyToOne()
   advisor!: Academician;
 
-  // TODO: acceptance/rejection field
+  @Enum()
+  status = ThesisTopicProposalState.WAITING;
 
   constructor(title: string, description: string, student: Student, advisor: Academician) {
     this.title = title;
