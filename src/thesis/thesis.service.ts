@@ -19,10 +19,11 @@ export class ThesisService {
 
     const student = await this.studentsRepo.findOne({ id: userId });
     const advisor = await this.academiciansRepo.findOne({ id: advisor_id });
+    if (!advisor) throw new Error("Advisor does not exist!");
 
     const proposal = new ThesisTopicProposal(title, description, student, advisor);
 
-    await this.thesesRepo.persistAndFlush([proposal]);
+    await this.thesesRepo.persistAndFlush(proposal);
 
     return proposal;
   }
@@ -31,8 +32,10 @@ export class ThesisService {
     return `getAll()`;
   }
 
-  getOne(id: string): string {
-    return `getOne(${id})`;
+  async getOne(id: number): Promise<ThesisTopicProposal> {
+    const tpp = await this.thesesRepo.findOne({ id });
+
+    return tpp;
   }
 
   updateOne(id: string): string {

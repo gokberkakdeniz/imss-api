@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
-import { CreateThesisRequest } from "./dto/create-thesis";
+import { CreateThesisRequest, CreateThesisResponse } from "./dto/create-thesis";
 import { ThesisService } from "./thesis.service";
+import { Request } from "express";
+import { GetThesisResponse } from "./dto/get-thesis";
 
 @ApiTags("theses")
 @ApiBearerAuth()
@@ -12,8 +14,10 @@ export class ThesisController {
   @Post()
   @ApiOperation({ summary: "Create new thesis" })
   @ApiBody({ type: CreateThesisRequest })
-  create(@Body() body: CreateThesisRequest, @Req() req): any {
-    return this.thesisService.create(req.user.id, body);
+  async create(@Body() body: CreateThesisRequest, @Req() req: Request): Promise<CreateThesisResponse> {
+    const thesis = await this.thesisService.create(req.user?.id, body);
+
+    return { thesis };
   }
 
   @Get()
@@ -24,8 +28,10 @@ export class ThesisController {
 
   @Get(":id")
   @ApiOperation({ summary: "Get a thesis" })
-  getOne(@Param("id", ParseIntPipe) id: number): string {
-    return `getOne(${id})`;
+  async getOne(@Param("id", ParseIntPipe) id: number): Promise<GetThesisResponse> {
+    const thesis = await this.thesisService.getOne(id);
+
+    return { thesis };
   }
 
   @Patch(":id")

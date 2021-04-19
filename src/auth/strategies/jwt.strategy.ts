@@ -2,6 +2,12 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
 import { JwtPayload } from "../auth.service";
+import { SISBRole } from "external-services/obs-bridge";
+
+export interface ControllerUserObject {
+  id: number;
+  role: SISBRole;
+}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -13,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload) {
+  async validate(payload: JwtPayload): Promise<ControllerUserObject> {
     return { id: payload.sub, role: payload.role };
   }
 }

@@ -9,21 +9,19 @@ import { FormService } from "./form.service";
 export class FormController {
   constructor(private formService: FormService) {}
 
-
-
- // @ApiBody({ type: CreateThesisRequest })
- // create(@Body() body: CreateThesisRequest, @Req() req): any {
- //   return this.thesisService.create(req.user.id, body);
- // }
+  // @ApiBody({ type: CreateThesisRequest })
+  // create(@Body() body: CreateThesisRequest, @Req() req): any {
+  //   return this.thesisService.create(req.user.id, body);
+  // }
   @Get()
   @ApiOperation({ summary: "Get all forms" })
-  getAll(): Promise<FormDetailDto[]> {
+  getAll(): Promise<(FormDetailDto | unknown)[]> {
     return this.formService.getAll();
   }
 
   @Get(":id")
   @ApiOperation({ summary: "Get a form" })
-  getOne(@Param("id", ParseIntPipe) id: number): Promise<FormDetailDto> {
+  getOne(@Param("id", ParseIntPipe) id: number): Promise<FormDetailDto | unknown> {
     return this.formService.getOne(id);
   }
 

@@ -14,5 +14,9 @@
     "declaration": true
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "src/**/*.spec.ts", ".vscode", "dist"]
+  "exclude": ["node_modules", "src/**/*.spec.ts", ".vscode", "dist"],
+  "typeRoots": [
+    "node_modules/@types",
+    "src/@types"
+  ]
 }

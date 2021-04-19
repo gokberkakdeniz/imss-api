@@ -6,7 +6,11 @@ import { LocalStrategy, JwtStrategy } from "./strategies";
 import { RolesGuard, JwtAuthGuard } from "./guards";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { MikroOrmModule } from "@mikro-orm/nestjs";
 import OBSBridge from "../external-services/obs-bridge";
+import { Academician } from "../models/Academician.entity";
+import { Student } from "../models/Student.entity";
+import { InstuteMember } from "../models/InstuteMember.entity";
 
 @Module({
   imports: [
@@ -15,6 +19,7 @@ import OBSBridge from "../external-services/obs-bridge";
       secret: process.env.IMSS_JWT_SECRET,
       signOptions: { expiresIn: "60h" },
     }),
+    MikroOrmModule.forFeature({ entities: [Academician, Student, InstuteMember] }),
   ],
   controllers: [AuthController],
   providers: [
