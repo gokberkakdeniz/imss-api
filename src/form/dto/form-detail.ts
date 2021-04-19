@@ -1,6 +1,8 @@
-import { FormAnswerField } from "../model/FormAnswerField";
+
+import { Collection } from "@mikro-orm/core";
 import { ApiProperty } from "@nestjs/swagger";
-import { FormField } from "../model/FormField";
+import { FormAnswerField } from "../../models/FormAnswerField.entity";
+import { FormField } from "../../models/FormField.entity";
 
 export class FormAnswerDetailDto {
   @ApiProperty()
@@ -9,9 +11,8 @@ export class FormAnswerDetailDto {
   name: string;
   @ApiProperty()
   receiverRole: string;
-  senderId: number;
   @ApiProperty()
-  fields: FormAnswerField[];
+  fields: Collection<FormAnswerField>;
 }
 
 export class FormDetailDto {
@@ -22,7 +23,5 @@ export class FormDetailDto {
   @ApiProperty()
   receiverRole: string;
   @ApiProperty()
-  senderId: number;
-  @ApiProperty()
-  fields: FormField[];
+  fields: Collection<FormField>;
 }

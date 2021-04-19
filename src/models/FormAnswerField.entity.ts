@@ -10,7 +10,7 @@ export class FormAnswerField {
   @Property()
   value: string;
 
-  @OneToOne()
+  @ManyToOne()
   field!: FormField;
 
   @ManyToOne()

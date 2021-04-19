@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
+import { Collection, Entity, ManyToOne, OneToMany, OneToOne, PrimaryKey, Property } from "@mikro-orm/core";
 import { Form } from "./Form.entity";
 import { FormAnswerField } from "./FormAnswerField.entity";
 
@@ -16,6 +16,6 @@ export class FormField {
   @ManyToOne()
   form!: Form;
 
-  @OneToOne(() => FormAnswerField, (faf) => faf.field)
-  field_answer!: FormAnswerField;
+  @OneToMany(() => FormAnswerField, (faf) => faf.field)
+  field_answer = new Collection<FormAnswerField>(this);;
 }

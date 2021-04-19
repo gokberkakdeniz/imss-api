@@ -12,13 +12,13 @@ export class FormAnswer {
   name: string;
 
   @Property()
-  sender_role: number;
+  sender_role: string;
 
   @Property()
-  receiver_role: number;
+  receiver_role: string;
 
   @Property()
-  template_url: number;
+  template_url: string;
 
   @ManyToOne()
   student!: Student;
@@ -28,4 +28,12 @@ export class FormAnswer {
 
   @ManyToOne()
   forms: Form;
+
+  constructor(name: string, sender_role: string, receiver_role: string, fields:Collection<FormAnswerField>,form: Form) {
+    this.name = name;
+    this.sender_role = sender_role;
+    this.receiver_role = receiver_role;
+    this.answers = fields;
+    this.forms = form;
+  }
 }
