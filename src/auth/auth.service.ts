@@ -7,6 +7,7 @@ import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
 import ObsBridgeService, { SISBRole, SISBUserResult } from "../external-services/obs-bridge";
+import { LoginResponse } from "./dto";
 
 export interface JwtPayload {
   sub: number;
@@ -50,7 +51,7 @@ export class AuthService {
     return result;
   }
 
-  async getToken(user: SISBUserResult["data"]) {
+  async getToken(user: SISBUserResult["data"]): Promise<LoginResponse> {
     const payload: JwtPayload = { sub: user.id, role: user.role };
 
     return {
