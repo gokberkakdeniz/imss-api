@@ -1,9 +1,10 @@
 import { EntityRepository } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import OBSBridge, { SISBUsersResult } from "../external-services/obs-bridge";
+import OBSBridge from "../external-services/obs-bridge";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
+import { GetAcademiciansOfUser } from "./dto/get-academicians";
 
 @Injectable()
 export class AcademicansService {
@@ -13,14 +14,12 @@ export class AcademicansService {
     @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
   ) {}
 
-  async getAcademicians(userId: number): Promise<SISBUsersResult> {
-    const student = await this.studentsRepo.findOne({ id: userId });
-    if (!student) throw new Error("Student does not exist!");
+  async getAcademicians(userId: number): Promise<GetAcademiciansOfUser> {
+    const student = await this.studentsRepo.findOneOrFail({ id: userId });
     const obsStudent = this.obsBridge.getUserById(student.obs_user_id);
-    if (!obsStudent) throw new Error("Student does not exist!");
     const studentDepartment = (await obsStudent).data.department;
-    if (!studentDepartment) throw new Error("Student does not belong any department!");
     const academicans = this.obsBridge.getAcademicansOfDepartment(studentDepartment);
-    return academicans;
+    const academiciansResultDto = GetAcademiciansOfUser.from((await academicans).data);
+    return academiciansResultDto;
   }
 }
