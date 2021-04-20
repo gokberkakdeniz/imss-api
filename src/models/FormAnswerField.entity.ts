@@ -15,4 +15,10 @@ export class FormAnswerField {
 
   @ManyToOne()
   form_answer!: FormAnswer;
+
+  constructor(field: FormField, value: string, form_answer: FormAnswer) {
+    this.field = field;
+    this.value = value;
+    this.form_answer = form_answer;
+  }
 }

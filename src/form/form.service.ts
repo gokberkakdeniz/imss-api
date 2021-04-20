@@ -1,11 +1,12 @@
 import { EntityRepository } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
+import { Student } from "../models/Student.entity";
 import { Form } from "../models/Form.entity";
 import { FormAnswer } from "../models/FormAnswer.entity";
 import { FormAnswerField } from "../models/FormAnswerField.entity";
 import { FormField } from "../models/FormField.entity";
-import { CreateFormAnswerRequest, FormDto, FormFieldDto } from "./dto";
+import { FormAnswerDto, FormAnswerFieldDto, FormDto, FormFieldDto, CreateFormAnswerRequest } from "./dto";
 
 @Injectable()
 export class FormService {
@@ -14,6 +15,7 @@ export class FormService {
     @InjectRepository(FormAnswer) private readonly formAnswersRepo: EntityRepository<FormAnswer>,
     @InjectRepository(FormField) private readonly formFieldsRepo: EntityRepository<FormField>,
     @InjectRepository(FormAnswerField) private readonly formAnswerFieldsRepo: EntityRepository<FormAnswerField>,
+    @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
   ) {}
 
   async getAll(): Promise<FormDto[]> {
@@ -40,31 +42,64 @@ export class FormService {
     return formDto;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async getAnswer(id: number): Promise<unknown> {
-    // const form = await this.formAnswersRepo.findOne({ id });
-    // return form;
-    return null;
+  async getAnswers(id: number): Promise<FormAnswerDto[]> {
+    const models = await this.formAnswersRepo.find({ form: id }, ["answers"]);
+
+    const mapped = models.map(FormAnswerDto.from);
+    for (let i = 0; i < mapped.length; i++) {
+      const model = models[i];
+      const dto = mapped[i];
+      model.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
+    }
+
+    return mapped;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async answer(userId: number, id: number, data: CreateFormAnswerRequest): Promise<unknown> {
-    // const form = await this.formsRepo.findOne({ id: id });
+  async getAnswer(id: number): Promise<FormAnswerDto> {
+    const model = await this.formAnswersRepo.findOneOrFail({ id }, ["answers"]);
 
-    // const answer = new FormAnswer();
-    // const answerFields = data.fields.map((answerFieldDto) => new FormAnswerField());
+    const dto = FormAnswerDto.from(model);
+    model.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
 
-    // const form = await this.formsRepo.findOne({ id: id });
-    // if (!form) throw new Error("Form does not exist!");
-    // const formField = await this.formFieldsRepo.findOne({ id: fields[0].field.id });
-    // if (!formField) throw new Error("Form Field does not exist!");
-    // //TODO check all fields to be has same field id
-    // const formAnswer = new FormAnswer(form.name, form.sender_role, form.receiver_role, form);
+    return dto;
+  }
 
-    // await this.formsRepo.persistAndFlush(formAnswer);
+  async answer(userId: number, id: number, data: CreateFormAnswerRequest): Promise<FormAnswerDto> {
+    // TODO: validate data
+    const student = await this.studentsRepo.findOneOrFail({ id: userId });
+    const form = await this.formsRepo.findOneOrFail({ id: id }, ["form_fields"]);
+    const fields = form.form_fields.getItems();
 
-    // return data;
+    const answer = new FormAnswer(form, student);
+    data.fields.forEach(({ id, value }) =>
+      answer.answers.add(
+        new FormAnswerField(
+          fields.find((f) => f.id === id),
+          value,
+          answer,
+        ),
+      ),
+    );
 
-    return null;
+    await this.formsRepo.persistAndFlush(answer);
+
+    const dto = FormAnswerDto.from(answer);
+    answer.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
+
+    return dto;
+  }
+
+  async updateAnswer(userId: number, id: number, data: CreateFormAnswerRequest): Promise<FormAnswerDto> {
+    const formAnswer = await this.formAnswersRepo.findOneOrFail({ id: id, student: { id: userId } }, ["answers"]);
+    const fields = formAnswer.answers.get();
+
+    data.fields.forEach((field) => (fields.find((f) => f.id == field.id).value = field.value));
+
+    await this.formAnswersRepo.flush();
+
+    const dto = FormAnswerDto.from(formAnswer);
+    formAnswer.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
+
+    return dto;
   }
 }

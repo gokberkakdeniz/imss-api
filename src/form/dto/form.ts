@@ -33,13 +33,17 @@ export class FormAnswerDto {
   @ApiProperty({ type: [FormAnswerFieldDto] })
   fields: FormAnswerFieldDto[];
 
-  constructor(id: number) {
+  @ApiProperty()
+  student_id: number;
+
+  constructor(id: number, student_id: number) {
     this.id = id;
+    this.student_id = student_id;
     this.fields = [];
   }
 
   static from(model: FormAnswer): FormAnswerDto {
-    const dto = new FormAnswerDto(model.id);
+    const dto = new FormAnswerDto(model.id, model.student.id);
 
     return dto;
   }
