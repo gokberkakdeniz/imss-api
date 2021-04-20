@@ -40,6 +40,7 @@ async function bootstrap() {
     .addTag("forms", "Form related endpoints")
     .addTag("theses", "Thesis related endpoints")
     .addTag("tss", "Thesis exam result related endpoints")
+    .addTag("academicians", "Academician related endpoints")
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

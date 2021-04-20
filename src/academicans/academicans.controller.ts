@@ -2,8 +2,9 @@ import { Controller, Get, Req } from "@nestjs/common";
 import { ApiOAuth2, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { AcademicansService } from "./academicans.service";
 import { Request } from "express";
-import { Roles } from "auth/decorators";
-import { GetAcademiciansOfUser } from "./dto/get-academicians";
+import { Roles } from "../auth/decorators";
+import { GetAcademiciansOfUserDto } from "./dto/get-academicians";
+
 @ApiTags("academicians")
 @ApiOAuth2([])
 @Controller("academicians")
@@ -16,9 +17,9 @@ export class AcademicansController {
   @ApiResponse({
     status: 200,
     description: "All academicians",
-    type: [GetAcademiciansOfUser],
+    type: [GetAcademiciansOfUserDto],
   })
-  async getAcademicians(@Req() req: Request): Promise<GetAcademiciansOfUser> {
+  async getAcademicians(@Req() req: Request): Promise<GetAcademiciansOfUserDto> {
     const academicians = await this.academicianService.getAcademicians(req.user.id);
     return academicians;
   }

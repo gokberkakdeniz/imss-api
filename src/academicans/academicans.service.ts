@@ -4,7 +4,7 @@ import { Injectable } from "@nestjs/common";
 import OBSBridge from "../external-services/obs-bridge";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
-import { GetAcademiciansOfUser } from "./dto/get-academicians";
+import { GetAcademiciansOfUserDto } from "./dto/get-academicians";
 
 @Injectable()
 export class AcademicansService {
@@ -14,12 +14,12 @@ export class AcademicansService {
     @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
   ) {}
 
-  async getAcademicians(userId: number): Promise<GetAcademiciansOfUser> {
+  async getAcademicians(userId: number): Promise<GetAcademiciansOfUserDto> {
     const student = await this.studentsRepo.findOneOrFail({ id: userId });
     const obsStudent = this.obsBridge.getUserById(student.obs_user_id);
     const studentDepartment = (await obsStudent).data.department;
     const academicans = this.obsBridge.getAcademicansOfDepartment(studentDepartment);
-    const academiciansResultDto = GetAcademiciansOfUser.from((await academicans).data);
+    const academiciansResultDto = new GetAcademiciansOfUserDto((await academicans).data);
     return academiciansResultDto;
   }
 }
