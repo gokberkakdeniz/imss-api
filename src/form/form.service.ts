@@ -5,8 +5,7 @@ import { Form } from "../models/Form.entity";
 import { FormAnswer } from "../models/FormAnswer.entity";
 import { FormAnswerField } from "../models/FormAnswerField.entity";
 import { FormField } from "../models/FormField.entity";
-import { FormDetailDto } from "./dto/form-detail";
-import { SubmitFormRequestDto, SubmitFormResultDto } from "./dto/submit-form";
+import { CreateFormAnswerRequest, FormDto, FormFieldDto } from "./dto";
 
 @Injectable()
 export class FormService {
@@ -17,38 +16,55 @@ export class FormService {
     @InjectRepository(FormAnswerField) private readonly formAnswerFieldsRepo: EntityRepository<FormAnswerField>,
   ) {}
 
-  async getAll(): Promise<(FormDetailDto | unknown)[]> {
-    const forms = await this.formsRepo.findAll();
-    return forms.map(
-      (form: Form) =>
-        ({ id: form.id, name: form.name, receiverRole: form.receiver_role, fields: form.form_fields } as FormDetailDto),
-    );
+  async getAll(): Promise<FormDto[]> {
+    const forms = await this.formsRepo.findAll({ populate: ["form_fields"] });
+    const result = forms.map((form) => {
+      const formDto = FormDto.from(form);
+      const formFields = form.form_fields.getItems();
+
+      formFields.forEach((formField) => formDto.fields.push(FormFieldDto.from(formField)));
+
+      return formDto;
+    });
+
+    return result;
   }
 
-  async getOne(id: number): Promise<Form | unknown> {
-    const form = await this.formsRepo.findOne({ id });
+  async getOne(id: number): Promise<FormDto> {
+    const form = await this.formsRepo.findOne({ id }, { populate: ["form_fields"] });
+    const formDto = FormDto.from(form);
+    const formFields = form.form_fields.getItems();
 
-    return form;
+    formFields.forEach((formField) => formDto.fields.push(FormFieldDto.from(formField)));
+
+    return formDto;
   }
 
-  async getAnswer(id: number): Promise<FormAnswer | unknown> {
-    const form = await this.formAnswersRepo.findOne({ id });
-
-    return form;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async getAnswer(id: number): Promise<unknown> {
+    // const form = await this.formAnswersRepo.findOne({ id });
+    // return form;
+    return null;
   }
 
-  async create(data: SubmitFormRequestDto): Promise<SubmitFormResultDto> {
-    const { id, fields } = data;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async answer(userId: number, id: number, data: CreateFormAnswerRequest): Promise<unknown> {
+    // const form = await this.formsRepo.findOne({ id: id });
 
-    const form = await this.formsRepo.findOne({ id: id });
-    if (!form) throw new Error("Form does not exist!");
-    const formField = await this.formFieldsRepo.findOne({ id: fields[0].field.id });
-    if (!formField) throw new Error("Form Field does not exist!");
-    //TODO check all fields to be has same field id
-    const formAnswer = new FormAnswer(form.name, form.sender_role, form.receiver_role, form);
+    // const answer = new FormAnswer();
+    // const answerFields = data.fields.map((answerFieldDto) => new FormAnswerField());
 
-    await this.formsRepo.persistAndFlush(formAnswer);
+    // const form = await this.formsRepo.findOne({ id: id });
+    // if (!form) throw new Error("Form does not exist!");
+    // const formField = await this.formFieldsRepo.findOne({ id: fields[0].field.id });
+    // if (!formField) throw new Error("Form Field does not exist!");
+    // //TODO check all fields to be has same field id
+    // const formAnswer = new FormAnswer(form.name, form.sender_role, form.receiver_role, form);
 
-    return data;
+    // await this.formsRepo.persistAndFlush(formAnswer);
+
+    // return data;
+
+    return null;
   }
 }

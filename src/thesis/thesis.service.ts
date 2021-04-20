@@ -5,6 +5,7 @@ import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { ThesisTopicProposal, ThesisTopicProposalState } from "../models/ThesisTopicProposal.entity";
 import { CreateThesisRequest } from "./dto/create-thesis";
+import { ThesisTopicProposalDto } from "./dto/thesis";
 import { UpdateThesisRequest, UpdateThesisStatusRequest } from "./dto/update-thesis";
 
 @Injectable()
@@ -15,7 +16,7 @@ export class ThesisService {
     @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
   ) {}
 
-  async create(userId: number, data: CreateThesisRequest): Promise<ThesisTopicProposal> {
+  async create(userId: number, data: CreateThesisRequest): Promise<ThesisTopicProposalDto> {
     const { title, description, advisor_id } = data;
 
     const student = await this.studentsRepo.findOne({ id: userId });
@@ -26,48 +27,49 @@ export class ThesisService {
 
     await this.thesesRepo.persistAndFlush(proposal);
 
-    return proposal;
+    return ThesisTopicProposalDto.from(proposal);
   }
 
-  async getAll(): Promise<ThesisTopicProposal[]> {
-    const tpp = await this.thesesRepo.findAll();
+  async getAll(): Promise<ThesisTopicProposalDto[]> {
+    const proposals = await this.thesesRepo.findAll();
+    const result = proposals.map(ThesisTopicProposalDto.from);
 
-    return tpp;
+    return result;
   }
 
-  async getOne(id: number): Promise<ThesisTopicProposal> {
-    const tpp = await this.thesesRepo.findOne({ id });
+  async getOne(id: number): Promise<ThesisTopicProposalDto> {
+    const proposal = await this.thesesRepo.findOne({ id });
 
-    return tpp;
+    return ThesisTopicProposalDto.from(proposal);
   }
 
-  async updateDetails(id: number, data: UpdateThesisRequest): Promise<ThesisTopicProposal> {
-    const tpp = await this.thesesRepo.findOne({ id });
+  async updateDetails(id: number, data: UpdateThesisRequest): Promise<ThesisTopicProposalDto> {
+    const proposal = await this.thesesRepo.findOne({ id });
 
     if (data.title) {
-      tpp.title = data.title;
+      proposal.title = data.title;
     }
 
     if (data.description) {
-      tpp.description = data.description;
+      proposal.description = data.description;
     }
 
     this.thesesRepo.flush();
 
-    return tpp;
+    return ThesisTopicProposalDto.from(proposal);
   }
 
-  async updateStatus(id: number, data: UpdateThesisStatusRequest): Promise<ThesisTopicProposal> {
-    const tpp = await this.thesesRepo.findOne({ id });
+  async updateStatus(id: number, data: UpdateThesisStatusRequest): Promise<ThesisTopicProposalDto> {
+    const proposal = await this.thesesRepo.findOne({ id });
 
     if (data.accept) {
-      tpp.status = ThesisTopicProposalState.ACCEPTED;
+      proposal.status = ThesisTopicProposalState.ACCEPTED;
     } else {
-      tpp.status = ThesisTopicProposalState.REJECTED;
+      proposal.status = ThesisTopicProposalState.REJECTED;
     }
 
     this.thesesRepo.flush();
 
-    return tpp;
+    return ThesisTopicProposalDto.from(proposal);
   }
 }

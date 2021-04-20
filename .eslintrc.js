@@ -28,5 +28,6 @@ module.exports = {
         ignoreRestSiblings: true,
       },
     ],
+    "@typescript-eslint/ban-ts-comment": "off",
   },
 };

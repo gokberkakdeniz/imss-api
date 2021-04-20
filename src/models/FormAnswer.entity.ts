@@ -9,30 +9,19 @@ export class FormAnswer {
   id!: number;
 
   @Property()
-  name: string;
-
-  @Property()
-  sender_role: string;
-
-  @Property()
-  receiver_role: string;
-
-  @Property()
   template_url: string;
 
   @ManyToOne()
   student!: Student;
 
-  @OneToMany(() => FormAnswerField, (fa) => fa.form_answer)
+  @OneToMany(() => FormAnswerField, (faf) => faf.form_answer)
   answers = new Collection<FormAnswerField>(this);
 
   @ManyToOne()
-  forms: Form;
+  form: Form;
 
-  constructor(name: string, sender_role: string, receiver_role: string, form: Form) {
-    this.name = name;
-    this.sender_role = sender_role;
-    this.receiver_role = receiver_role;
-    this.forms = form;
+  constructor(form: Form, student: Student) {
+    this.form = form;
+    this.student = student;
   }
 }

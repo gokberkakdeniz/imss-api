@@ -23,6 +23,6 @@ export class Form {
   @OneToMany(() => FormField, (ff) => ff.form)
   form_fields = new Collection<FormField>(this);
 
-  @OneToMany(() => FormAnswer, (fa) => fa.forms)
+  @OneToMany(() => FormAnswer, (fa) => fa.form)
   answers = new Collection<FormAnswer>(this);
 }
