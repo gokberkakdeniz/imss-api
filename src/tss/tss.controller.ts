@@ -1,8 +1,8 @@
 import { Controller, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiOAuth2, ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("tss")
-@ApiBearerAuth()
+@ApiOAuth2([])
 @Controller("tss")
 export class TssController {
   @Post()

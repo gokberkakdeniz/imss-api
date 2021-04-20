@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ApiOAuth2, ApiBody, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { ThesisService } from "./thesis.service";
 import { Request } from "express";
 import { CreateThesisRequest, CreateThesisResponse, GetThesisResponse, GetThesesResponse } from "./dto";
@@ -12,7 +12,7 @@ import {
 } from "./dto/update-thesis";
 
 @ApiTags("theses")
-@ApiBearerAuth()
+@ApiOAuth2([])
 @Controller("theses")
 export class ThesisController {
   constructor(private thesisService: ThesisService) {}

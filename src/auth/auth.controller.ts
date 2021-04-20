@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
-import { ApiOperation, ApiTags, ApiResponse, ApiBody, ApiBearerAuth } from "@nestjs/swagger";
+import { ApiOperation, ApiTags, ApiResponse, ApiBody, ApiOAuth2 } from "@nestjs/swagger";
 import ObsBridgeService, { SISBUser, SISBUserResult } from "../external-services/obs-bridge";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
@@ -9,7 +9,7 @@ import { Request } from "express";
 import { GetProfileResponse, LoginRequest, LoginResponse } from "./dto";
 
 @ApiTags("auth")
-@ApiBearerAuth()
+@ApiOAuth2([])
 @Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService, private obsBridgeService: ObsBridgeService) {}

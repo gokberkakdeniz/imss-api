@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
-import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
+import { ApiOAuth2, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FormAnswerDetailDto, FormDetailDto } from "./dto/form-detail";
 import { SubmitFormRequestDto, SubmitFormResultDto } from "./dto/submit-form";
 import { FormService } from "./form.service";
 @ApiTags("forms")
-@ApiBearerAuth()
+@ApiOAuth2([])
 @Controller("forms")
 export class FormController {
   constructor(private formService: FormService) {}

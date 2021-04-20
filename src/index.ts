@@ -29,7 +29,13 @@ async function bootstrap() {
     .setTitle("IMSS")
     .setDescription("IZTECH Master's Students System API documentation")
     .setVersion("1.0")
-    .addOAuth2({ type: "oauth2", flows: { password: { tokenUrl: "/auth/login", scopes: {} } } })
+    .addOAuth2({
+      type: "oauth2",
+      scheme: "bearer",
+      bearerFormat: "JWT",
+      flows: { password: { tokenUrl: "/auth/login", scopes: {} } },
+      in: "header",
+    })
     .addTag("auth", "User related endpoints")
     .addTag("forms", "Form related endpoints")
     .addTag("theses", "Thesis related endpoints")
