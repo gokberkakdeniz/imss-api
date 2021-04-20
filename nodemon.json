@@ -5,6 +5,6 @@
   "ignore": [
     "src/**/*.spec.ts"
   ],
-  "exec": "ts-node --files ./src/index.ts",
+  "exec": "yarn serve",
   "ext": "js,ts,json"
 }

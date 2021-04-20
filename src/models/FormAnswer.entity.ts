@@ -29,11 +29,10 @@ export class FormAnswer {
   @ManyToOne()
   forms: Form;
 
-  constructor(name: string, sender_role: string, receiver_role: string, fields:Collection<FormAnswerField>,form: Form) {
+  constructor(name: string, sender_role: string, receiver_role: string, form: Form) {
     this.name = name;
     this.sender_role = sender_role;
     this.receiver_role = receiver_role;
-    this.answers = fields;
     this.forms = form;
   }
 }

@@ -3,9 +3,9 @@ import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
-import { ThesisTopicProposal } from "../models/ThesisTopicProposal.entity";
+import { ThesisTopicProposal, ThesisTopicProposalState } from "../models/ThesisTopicProposal.entity";
 import { CreateThesisRequest } from "./dto/create-thesis";
-import { UpdateThesisRequest } from "./dto/update-thesis";
+import { UpdateThesisRequest, UpdateThesisStatusRequest } from "./dto/update-thesis";
 
 @Injectable()
 export class ThesisService {
@@ -41,7 +41,7 @@ export class ThesisService {
     return tpp;
   }
 
-  async updateOne(id: number, data: UpdateThesisRequest): Promise<ThesisTopicProposal> {
+  async updateDetails(id: number, data: UpdateThesisRequest): Promise<ThesisTopicProposal> {
     const tpp = await this.thesesRepo.findOne({ id });
 
     if (data.title) {
@@ -50,6 +50,20 @@ export class ThesisService {
 
     if (data.description) {
       tpp.description = data.description;
+    }
+
+    this.thesesRepo.flush();
+
+    return tpp;
+  }
+
+  async updateStatus(id: number, data: UpdateThesisStatusRequest): Promise<ThesisTopicProposal> {
+    const tpp = await this.thesesRepo.findOne({ id });
+
+    if (data.accept) {
+      tpp.status = ThesisTopicProposalState.ACCEPTED;
+    } else {
+      tpp.status = ThesisTopicProposalState.REJECTED;
     }
 
     this.thesesRepo.flush();

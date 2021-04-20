@@ -37,21 +37,18 @@ export class FormService {
     return form;
   }
 
-  async create(data: SubmitFormRequestDto):Promise<SubmitFormResultDto>{
+  async create(data: SubmitFormRequestDto): Promise<SubmitFormResultDto> {
     const { id, fields } = data;
 
-    const form = await this.formsRepo.findOne({id:id});
+    const form = await this.formsRepo.findOne({ id: id });
     if (!form) throw new Error("Form does not exist!");
-    const formField = await this.formFieldsRepo.findOne({ id:fields[0].field.id });
-    if(!formField) throw new Error("Form Field does not exist!");
+    const formField = await this.formFieldsRepo.findOne({ id: fields[0].field.id });
+    if (!formField) throw new Error("Form Field does not exist!");
     //TODO check all fields to be has same field id
-    const formAnswer = new FormAnswer(form.name, form.sender_role,form.receiver_role,fields,form);
+    const formAnswer = new FormAnswer(form.name, form.sender_role, form.receiver_role, form);
 
     await this.formsRepo.persistAndFlush(formAnswer);
 
     return data;
   }
-
-
-  
 }

@@ -6,9 +6,12 @@ import { Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
+import { readFileSync } from "fs";
 
 async function bootstrap() {
   const port = process.env.IMSS_PORT || 3333;
+
+  const swaggerCss = readFileSync(__dirname + "/assets/swagger.css").toString();
 
   const app = await NestFactory.create(AppModule);
 
@@ -26,7 +29,7 @@ async function bootstrap() {
     .setTitle("IMSS")
     .setDescription("IZTECH Master's Students System API documentation")
     .setVersion("1.0")
-    .addBearerAuth()
+    .addOAuth2({ type: "oauth2", flows: { password: { tokenUrl: "/auth/login", scopes: {} } } })
     .addTag("auth", "User related endpoints")
     .addTag("forms", "Form related endpoints")
     .addTag("theses", "Thesis related endpoints")
@@ -34,7 +37,9 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("api", app, document);
+  SwaggerModule.setup("api", app, document, {
+    customCss: swaggerCss,
+  });
 
   await app.listen(port, async () => {
     Logger.log(`Listening at ${await app.getUrl()}`);

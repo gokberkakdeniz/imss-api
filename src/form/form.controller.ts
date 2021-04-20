@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post } from "@nestjs/common";
 import { ApiBearerAuth, ApiBody, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { FormAnswerDetailDto, FormDetailDto } from "./dto/form-detail";
 import { SubmitFormRequestDto, SubmitFormResultDto } from "./dto/submit-form";
@@ -24,7 +24,7 @@ export class FormController {
 
   @Post(":id/answer")
   @ApiOperation({ summary: "Fill a form" })
-  @ApiBody({ type: SubmitFormRequestDto }) 
+  @ApiBody({ type: SubmitFormRequestDto })
   async createAnswer(@Body() body: SubmitFormRequestDto): Promise<SubmitFormResultDto> {
     const formAnswer = await this.formService.create(body);
     return formAnswer;
@@ -36,7 +36,7 @@ export class FormController {
     const formAnswer = await this.formService.getAnswer(id);
     return formAnswer;
   }
-/*
+  /*
   @Patch(":id")
   @ApiOperation({ summary: "Update a form" })
   updateOne(@Param("id") id: string): string {

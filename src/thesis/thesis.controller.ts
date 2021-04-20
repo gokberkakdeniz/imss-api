@@ -4,7 +4,12 @@ import { ThesisService } from "./thesis.service";
 import { Request } from "express";
 import { CreateThesisRequest, CreateThesisResponse, GetThesisResponse, GetThesesResponse } from "./dto";
 import { Roles } from "../auth/decorators";
-import { UpdateThesisRequest, UpdateThesisResponse } from "./dto/update-thesis";
+import {
+  UpdateThesisRequest,
+  UpdateThesisResponse,
+  UpdateThesisStatusRequest,
+  UpdateThesisStatusResponse,
+} from "./dto/update-thesis";
 
 @ApiTags("theses")
 @ApiBearerAuth()
@@ -55,6 +60,7 @@ export class ThesisController {
   }
 
   @Patch(":id")
+  @Roles("STUDENT")
   @ApiOperation({ summary: "Update a thesis" })
   @ApiBody({ type: UpdateThesisRequest })
   @ApiResponse({
@@ -66,7 +72,25 @@ export class ThesisController {
     @Param("id", ParseIntPipe) id: number,
     @Body() body: UpdateThesisRequest,
   ): Promise<UpdateThesisResponse> {
-    const thesis = await this.thesisService.updateOne(id, body);
+    const thesis = await this.thesisService.updateDetails(id, body);
+
+    return { thesis };
+  }
+
+  @Patch(":id/status")
+  @Roles("ACADEMICIAN")
+  @ApiOperation({ summary: "Accept or reject thesis proposal" })
+  @ApiBody({ type: UpdateThesisStatusRequest })
+  @ApiResponse({
+    status: 200,
+    description: "Updated thesis",
+    type: UpdateThesisStatusResponse,
+  })
+  async updateStatus(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() body: UpdateThesisStatusRequest,
+  ): Promise<UpdateThesisStatusResponse> {
+    const thesis = await this.thesisService.updateStatus(id, body);
 
     return { thesis };
   }

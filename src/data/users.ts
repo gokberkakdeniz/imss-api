@@ -3,11 +3,11 @@ import { SISBUser } from "../external-services/obs-bridge";
 const users: SISBUser[] = [
   {
     id: 1,
-    username: "mustafaozuysal@iyte.edu.tr",
-    password: "123456",
+    username: "a",
+    password: "a",
     role: "ACADEMICIAN",
-    name: "Mustafa",
-    surname: "Özuysal",
+    name: "api test academician account",
+    surname: "swagger",
   },
   {
     id: 2,
@@ -99,10 +99,10 @@ const users: SISBUser[] = [
   },
   {
     id: 13,
-    username: "t",
-    password: "t",
+    username: "s",
+    password: "s",
     role: "STUDENT",
-    name: "api test account",
+    name: "api test student account",
     surname: "swagger",
   },
 ];
