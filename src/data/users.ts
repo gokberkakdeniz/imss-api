@@ -8,6 +8,7 @@ const users: SISBUser[] = [
     role: "ACADEMICIAN",
     name: "api test academician account",
     surname: "swagger",
+    department: "CENG",
   },
   {
     id: 2,
@@ -16,6 +17,7 @@ const users: SISBUser[] = [
     role: "ACADEMICIAN",
     name: "Görkem",
     surname: "Giray",
+    department: "CENG",
   },
   {
     id: 3,
@@ -24,6 +26,7 @@ const users: SISBUser[] = [
     role: "ACADEMICIAN",
     name: "Selma",
     surname: "Tekir",
+    department: "CENG",
   },
   {
     id: 4,
@@ -32,6 +35,7 @@ const users: SISBUser[] = [
     role: "ACADEMICIAN",
     name: "Yalın",
     surname: "Baştanlar",
+    department: "CENG",
   },
   {
     id: 5,
@@ -40,6 +44,7 @@ const users: SISBUser[] = [
     role: "ACADEMICIAN",
     name: "Tuğkan",
     surname: "Tuğlular",
+    department: "CENG",
   },
   {
     id: 6,
@@ -48,6 +53,7 @@ const users: SISBUser[] = [
     role: "STUDENT",
     name: "Gökberk",
     surname: "Akdeniz",
+    department: "CENG",
   },
   {
     id: 7,
@@ -56,6 +62,7 @@ const users: SISBUser[] = [
     role: "STUDENT",
     name: "Hakan",
     surname: "Alp",
+    department: "CENG",
   },
   {
     id: 8,
@@ -64,6 +71,7 @@ const users: SISBUser[] = [
     role: "STUDENT",
     name: "Arif Burak",
     surname: "Demiray",
+    department: "CENG",
   },
   {
     id: 9,
@@ -72,6 +80,7 @@ const users: SISBUser[] = [
     role: "STUDENT",
     name: "Erim",
     surname: "Günenç",
+    department: "CENG",
   },
   {
     id: 10,
@@ -80,6 +89,7 @@ const users: SISBUser[] = [
     role: "STUDENT",
     name: "Burak",
     surname: "Tutumlu",
+    department: "CENG",
   },
   {
     id: 11,
@@ -104,6 +114,7 @@ const users: SISBUser[] = [
     role: "STUDENT",
     name: "api test student account",
     surname: "swagger",
+    department: "CENG",
   },
 ];
 

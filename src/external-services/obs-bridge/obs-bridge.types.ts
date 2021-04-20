@@ -6,6 +6,7 @@ export interface SISBUser {
   role: SISBRole;
   name: string;
   surname: string;
+  department?: SISBDepartment;
 }
 
 export interface SISBResult<T> {
@@ -14,7 +15,12 @@ export interface SISBResult<T> {
   data?: T;
 }
 
-export type SISBUserResult = SISBResult<Omit<SISBUser, "password">>;
+export type SISBDepartment = "CENG";
+
+export type SISBUserDto = Omit<SISBUser, "password">;
+
+export type SISBUserResult = SISBResult<SISBUserDto>;
+export type SISBUsersResult = SISBResult<SISBUserDto[]>;
 
 export interface StudentInformationSystemBridge {
   getUserByCrediantals: (username: string, password: string) => Promise<SISBUserResult>;

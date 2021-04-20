@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { StudentInformationSystemBridge, SISBUserResult, SISBUser } from "../../external-services/obs-bridge";
 
 import users from "../../data/users";
+import { SISBDepartment, SISBUsersResult } from "./obs-bridge.types";
 
 @Injectable()
 export default class ObsBridgeService implements StudentInformationSystemBridge {
@@ -29,5 +30,25 @@ export default class ObsBridgeService implements StudentInformationSystemBridge 
       success: false,
       error: "User not found.",
     });
+  }
+
+  private getUsers(predicate: (u: SISBUser) => boolean): Promise<SISBUsersResult> {
+    const filtered = users.filter(predicate).map(({ password, ...rest }) => rest);
+
+    if (filtered.length > 0) {
+      return Promise.resolve({
+        success: true,
+        data: filtered,
+      });
+    }
+
+    return Promise.resolve({
+      success: false,
+      error: "User not found.",
+    });
+  }
+
+  getAcademicansOfDepartment(department: SISBDepartment): Promise<SISBUsersResult> {
+    return this.getUsers((user) => user.role === "ACADEMICIAN" && user.department === department);
   }
 }
