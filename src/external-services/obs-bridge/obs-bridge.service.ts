@@ -5,7 +5,7 @@ import users from "../../data/users";
 import { SISBDepartment, SISBUsersResult } from "./obs-bridge.types";
 
 @Injectable()
-export default class ObsBridgeService implements StudentInformationSystemBridge {
+export class ObsBridgeService implements StudentInformationSystemBridge {
   getUserById(userId: number): Promise<SISBUserResult> {
     return this.getUser((user) => user.id === userId);
   }

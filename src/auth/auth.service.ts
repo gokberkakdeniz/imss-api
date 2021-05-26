@@ -6,7 +6,7 @@ import { JwtService } from "@nestjs/jwt";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
-import ObsBridgeService, { SISBRole, SISBUserResult } from "../external-services/obs-bridge";
+import { ObsBridgeService, SISBRole, SISBUserResult } from "../external-services/obs-bridge";
 import { LoginResponse } from "./dto";
 import { MailService } from "../mail/mail.service";
 

@@ -9,6 +9,7 @@ import { FormService } from "./form.service";
 import { Student } from "../models/Student.entity";
 import { Academician } from "../models/Academician.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
+import { FormValidator } from "./form.validator";
 
 @Module({
   imports: [
@@ -17,6 +18,6 @@ import { InstuteMember } from "../models/InstuteMember.entity";
     }),
   ],
   controllers: [FormController],
-  providers: [FormService],
+  providers: [FormService, FormValidator],
 })
 export class FormModule {}

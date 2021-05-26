@@ -6,10 +6,12 @@ import { ThesisTopicProposal } from "../models/ThesisTopicProposal.entity";
 
 import { ThesisController } from "./thesis.controller";
 import { ThesisService } from "./thesis.service";
+import { ThesisValidator } from "./thesis.validator";
+import { ObsBridgeModule } from "../external-services/obs-bridge";
 
 @Module({
-  imports: [MikroOrmModule.forFeature({ entities: [ThesisTopicProposal, Academician, Student] })],
+  imports: [MikroOrmModule.forFeature({ entities: [ThesisTopicProposal, Academician, Student] }), ObsBridgeModule],
   controllers: [ThesisController],
-  providers: [ThesisService],
+  providers: [ThesisService, ThesisValidator],
 })
 export class ThesisModule {}

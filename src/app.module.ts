@@ -9,6 +9,7 @@ import { MailModule } from "./mail/mail.module";
 import config from "./mikro-orm.config";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { ExceptionInterceptor } from "./interceptors";
+import { ObsBridgeModule } from "./external-services/obs-bridge/obs-bridge.module";
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ExceptionInterceptor } from "./interceptors";
     TssModule,
     AcademicansModule,
     MailModule,
+    ObsBridgeModule,
   ],
   controllers: [],
   providers: [

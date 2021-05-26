@@ -27,21 +27,20 @@ export class ThesisController {
     type: CreateThesisResponse,
   })
   async create(@Body() body: CreateThesisRequest, @Req() req: Request): Promise<CreateThesisResponse> {
-    const thesis = await this.thesisService.create(req.user.id, body);
+    const thesis = await this.thesisService.create(req.user, body);
 
     return { thesis };
   }
 
   @Get()
-  @Roles("INSTITUTE_MEMBER", "ACADEMICIAN")
   @ApiOperation({ summary: "Get all thesis" })
   @ApiResponse({
     status: 200,
     description: "All theses",
     type: GetThesesResponse,
   })
-  async getAll(): Promise<GetThesesResponse> {
-    const theses = await this.thesisService.getAll();
+  async getAll(@Req() req: Request): Promise<GetThesesResponse> {
+    const theses = await this.thesisService.getAll(req.user);
 
     return { theses };
   }
@@ -53,14 +52,14 @@ export class ThesisController {
     description: "Thesis with given id",
     type: GetThesisResponse,
   })
-  async getOne(@Param("id", ParseIntPipe) id: number): Promise<GetThesisResponse> {
-    const thesis = await this.thesisService.getOne(id);
+  async getOne(@Param("id", ParseIntPipe) id: number, @Req() req: Request): Promise<GetThesisResponse> {
+    const thesis = await this.thesisService.getOne(req.user, id);
 
     return { thesis };
   }
 
   @Patch(":id")
-  @Roles("STUDENT")
+  @Roles("STUDENT", "ACADEMICIAN")
   @ApiOperation({ summary: "Update a thesis" })
   @ApiBody({ type: UpdateThesisRequest })
   @ApiResponse({
@@ -71,8 +70,9 @@ export class ThesisController {
   async updateOne(
     @Param("id", ParseIntPipe) id: number,
     @Body() body: UpdateThesisRequest,
+    @Req() req: Request,
   ): Promise<UpdateThesisResponse> {
-    const thesis = await this.thesisService.updateDetails(id, body);
+    const thesis = await this.thesisService.updateDetails(req.user, id, body);
 
     return { thesis };
   }
@@ -89,8 +89,9 @@ export class ThesisController {
   async updateStatus(
     @Param("id", ParseIntPipe) id: number,
     @Body() body: UpdateThesisStatusRequest,
+    @Req() req: Request,
   ): Promise<UpdateThesisStatusResponse> {
-    const thesis = await this.thesisService.updateStatus(id, body);
+    const thesis = await this.thesisService.updateStatus(req.user, id, body);
 
     return { thesis };
   }

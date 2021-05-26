@@ -4,10 +4,10 @@ import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { AcademicansController } from "./academicans.controller";
 import { AcademicansService } from "./academicans.service";
-import OBSBridge from "../external-services/obs-bridge";
+import { ObsBridgeModule } from "../external-services/obs-bridge";
 @Module({
-  imports: [MikroOrmModule.forFeature({ entities: [Student, Academician] })],
+  imports: [MikroOrmModule.forFeature({ entities: [Student, Academician] }), ObsBridgeModule],
   controllers: [AcademicansController],
-  providers: [AcademicansService, OBSBridge],
+  providers: [AcademicansService],
 })
 export class AcademicansModule {}

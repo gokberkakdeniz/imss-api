@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiTags, ApiResponse, ApiBody, ApiOAuth2 } from "@nestjs/swagger";
-import ObsBridgeService, { SISBUser, SISBUserResult } from "../external-services/obs-bridge";
+import { ObsBridgeService, SISBUser, SISBUserResult } from "../external-services/obs-bridge";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { Public } from "./decorators";

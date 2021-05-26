@@ -7,11 +7,11 @@ import { FormAnswer } from "../models/FormAnswer.entity";
 import { FormAnswerField } from "../models/FormAnswerField.entity";
 import { FormField } from "../models/FormField.entity";
 import { FormAnswerDto, FormAnswerFieldDto, FormDto, FormFieldDto, CreateFormAnswerRequest } from "./dto";
-import { hasAccessToAnswerForm, itItTheirFormAnswer } from "./form.validator";
 import { PermissionDeniedException } from "../exceptions";
 import { Academician } from "../models/Academician.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
 import { ControllerUserObject } from "auth/strategies/jwt.strategy";
+import { FormValidator } from "./form.validator";
 
 @Injectable()
 export class FormService {
@@ -23,6 +23,7 @@ export class FormService {
     @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
     @InjectRepository(Academician) private readonly academicanRepo: EntityRepository<Academician>,
     @InjectRepository(InstuteMember) private readonly instuteMemberRepo: EntityRepository<InstuteMember>,
+    private validator: FormValidator,
   ) {}
 
   async getAll(): Promise<FormDto[]> {
@@ -68,7 +69,7 @@ export class FormService {
     const model = await this.formAnswersRepo.findOneOrFail({ id }, ["answers"]);
     const person = await this.getPerson(user);
 
-    if (user.role === "STUDENT" && !itItTheirFormAnswer(person, model))
+    if (user.role === "STUDENT" && !this.validator.itItTheirFormAnswer(person, model))
       throw new PermissionDeniedException("The students can only see their form answers.");
 
     const dto = FormAnswerDto.from(model);
@@ -81,7 +82,7 @@ export class FormService {
     const person = await this.getPerson(user);
     const form = await this.formsRepo.findOneOrFail({ id: id }, ["form_fields"]);
 
-    if (!hasAccessToAnswerForm(person, form))
+    if (!this.validator.hasAccessToAnswerForm(person, form))
       throw new PermissionDeniedException("The user is not subject of the given form.");
 
     const fields = form.form_fields.getItems();
