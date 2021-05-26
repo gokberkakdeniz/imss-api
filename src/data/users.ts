@@ -9,6 +9,7 @@ const users: SISBUser[] = [
     name: "api test academician account",
     surname: "swagger",
     department: "CENG",
+    email: "academician-test-1@imss.anonaddy.me",
   },
   {
     id: 2,
@@ -18,6 +19,7 @@ const users: SISBUser[] = [
     name: "Görkem",
     surname: "Giray",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 3,
@@ -27,6 +29,7 @@ const users: SISBUser[] = [
     name: "Selma",
     surname: "Tekir",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 4,
@@ -36,6 +39,7 @@ const users: SISBUser[] = [
     name: "Yalın",
     surname: "Baştanlar",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 5,
@@ -45,6 +49,7 @@ const users: SISBUser[] = [
     name: "Tuğkan",
     surname: "Tuğlular",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 6,
@@ -54,6 +59,7 @@ const users: SISBUser[] = [
     name: "Gökberk",
     surname: "Akdeniz",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 7,
@@ -63,6 +69,7 @@ const users: SISBUser[] = [
     name: "Hakan",
     surname: "Alp",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 8,
@@ -72,6 +79,7 @@ const users: SISBUser[] = [
     name: "Arif Burak",
     surname: "Demiray",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 9,
@@ -81,6 +89,7 @@ const users: SISBUser[] = [
     name: "Erim",
     surname: "Günenç",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 10,
@@ -90,6 +99,7 @@ const users: SISBUser[] = [
     name: "Burak",
     surname: "Tutumlu",
     department: "CENG",
+    email: "NULL",
   },
   {
     id: 11,
@@ -98,6 +108,7 @@ const users: SISBUser[] = [
     role: "INSTITUTE_MEMBER",
     name: "IM",
     surname: "1",
+    email: "im-test-1@imss.anonaddy.com",
   },
   {
     id: 12,
@@ -106,6 +117,7 @@ const users: SISBUser[] = [
     role: "INSTITUTE_MEMBER",
     name: "IM",
     surname: "2",
+    email: "NULL",
   },
   {
     id: 13,
@@ -115,6 +127,7 @@ const users: SISBUser[] = [
     name: "api test student account",
     surname: "swagger",
     department: "CENG",
+    email: "student-test-1@imss.anonaddy.me",
   },
 ];
 

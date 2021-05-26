@@ -56,7 +56,7 @@ export class FormController {
     @Body() body: CreateFormAnswerRequest,
     @Req() req: Request,
   ): Promise<CreateFormAnswerResponse> {
-    const formAnswer = await this.formService.answer(req.user.id, id, body);
+    const formAnswer = await this.formService.answer(req.user, id, body);
     return { form_answer: formAnswer };
   }
 
@@ -67,8 +67,8 @@ export class FormController {
     description: "The form answer idenfied by given id",
     type: GetFormAnswersResponse,
   })
-  async getAnswers(@Param("id", ParseIntPipe) id: number): Promise<GetFormAnswersResponse> {
-    const formAnswers = await this.formService.getAnswers(id);
+  async getAnswers(@Param("id", ParseIntPipe) id: number, @Req() req: Request): Promise<GetFormAnswersResponse> {
+    const formAnswers = await this.formService.getAnswers(req.user, id);
     return { form_answers: formAnswers };
   }
 
@@ -79,8 +79,8 @@ export class FormController {
     description: "The form answer idenfied by given id",
     type: GetFormAnswerResponse,
   })
-  async getAnswer(@Param("id", ParseIntPipe) id: number): Promise<GetFormAnswerResponse> {
-    const formAnswer = await this.formService.getAnswer(id);
+  async getAnswer(@Param("id", ParseIntPipe) id: number, @Req() req: Request): Promise<GetFormAnswerResponse> {
+    const formAnswer = await this.formService.getAnswer(req.user, id);
     return { form_answer: formAnswer };
   }
 
@@ -97,7 +97,7 @@ export class FormController {
     @Body() body: UpdateFormAnswerRequest,
     @Req() req: Request,
   ): Promise<UpdateFormAnswerResponse> {
-    const formAnswer = await this.formService.updateAnswer(req.user.id, id, body);
+    const formAnswer = await this.formService.updateAnswer(req.user, id, body);
     return { form_answer: formAnswer };
   }
 }

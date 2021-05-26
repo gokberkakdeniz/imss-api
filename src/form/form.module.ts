@@ -7,9 +7,15 @@ import { Form } from "../models/Form.entity";
 import { FormController } from "./form.controller";
 import { FormService } from "./form.service";
 import { Student } from "../models/Student.entity";
+import { Academician } from "../models/Academician.entity";
+import { InstuteMember } from "../models/InstuteMember.entity";
 
 @Module({
-  imports: [MikroOrmModule.forFeature({ entities: [Form, FormAnswer, FormField, FormAnswerField, Student] })],
+  imports: [
+    MikroOrmModule.forFeature({
+      entities: [Form, FormAnswer, FormField, FormAnswerField, Student, Academician, InstuteMember],
+    }),
+  ],
   controllers: [FormController],
   providers: [FormService],
 })

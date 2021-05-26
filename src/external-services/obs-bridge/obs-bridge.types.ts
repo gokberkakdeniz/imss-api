@@ -7,6 +7,7 @@ export interface SISBUser {
   name: string;
   surname: string;
   department?: SISBDepartment;
+  email: string;
 }
 
 export interface SISBResult<T> {

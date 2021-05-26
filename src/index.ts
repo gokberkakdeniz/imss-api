@@ -48,9 +48,9 @@ async function bootstrap() {
     customCss: swaggerCss,
   });
 
-  await app.listen(port, async () => {
-    Logger.log(`Listening at ${await app.getUrl()}`);
-  });
+  await app.listen(port, "0.0.0.0");
+
+  Logger.log(`Listening at ${await app.getUrl()}`);
 }
 
 bootstrap();

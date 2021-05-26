@@ -8,6 +8,7 @@ import { Student } from "../models/Student.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
 import ObsBridgeService, { SISBRole, SISBUserResult } from "../external-services/obs-bridge";
 import { LoginResponse } from "./dto";
+import { MailService } from "../mail/mail.service";
 
 export interface JwtPayload {
   sub: number;
@@ -17,6 +18,7 @@ export interface JwtPayload {
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly mailService: MailService,
     private readonly obsBridgeService: ObsBridgeService,
     private readonly jwtService: JwtService,
     @InjectRepository(Academician) private readonly academicansRepo: EntityRepository<Academician>,
@@ -53,6 +55,8 @@ export class AuthService {
 
   async getToken(user: SISBUserResult["data"]): Promise<LoginResponse> {
     const payload: JwtPayload = { sub: user.id, role: user.role };
+
+    await this.mailService.sendTestEmail(user);
 
     return {
       access_token: this.jwtService.sign(payload),

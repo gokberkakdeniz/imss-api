@@ -11,6 +11,7 @@ import OBSBridge from "../external-services/obs-bridge";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
+import { MailModule } from "../mail/mail.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { InstuteMember } from "../models/InstuteMember.entity";
       signOptions: { expiresIn: "60h" },
     }),
     MikroOrmModule.forFeature({ entities: [Academician, Student, InstuteMember] }),
+    MailModule,
   ],
   controllers: [AuthController],
   providers: [

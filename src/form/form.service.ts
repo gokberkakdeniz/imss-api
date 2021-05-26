@@ -7,6 +7,11 @@ import { FormAnswer } from "../models/FormAnswer.entity";
 import { FormAnswerField } from "../models/FormAnswerField.entity";
 import { FormField } from "../models/FormField.entity";
 import { FormAnswerDto, FormAnswerFieldDto, FormDto, FormFieldDto, CreateFormAnswerRequest } from "./dto";
+import { hasAccessToAnswerForm, itItTheirFormAnswer } from "./form.validator";
+import { PermissionDeniedException } from "../exceptions";
+import { Academician } from "../models/Academician.entity";
+import { InstuteMember } from "../models/InstuteMember.entity";
+import { ControllerUserObject } from "auth/strategies/jwt.strategy";
 
 @Injectable()
 export class FormService {
@@ -16,6 +21,8 @@ export class FormService {
     @InjectRepository(FormField) private readonly formFieldsRepo: EntityRepository<FormField>,
     @InjectRepository(FormAnswerField) private readonly formAnswerFieldsRepo: EntityRepository<FormAnswerField>,
     @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
+    @InjectRepository(Academician) private readonly academicanRepo: EntityRepository<Academician>,
+    @InjectRepository(InstuteMember) private readonly instuteMemberRepo: EntityRepository<InstuteMember>,
   ) {}
 
   async getAll(): Promise<FormDto[]> {
@@ -33,7 +40,7 @@ export class FormService {
   }
 
   async getOne(id: number): Promise<FormDto> {
-    const form = await this.formsRepo.findOne({ id }, { populate: ["form_fields"] });
+    const form = await this.formsRepo.findOneOrFail({ id }, { populate: ["form_fields"] });
     const formDto = FormDto.from(form);
     const formFields = form.form_fields.getItems();
 
@@ -42,8 +49,10 @@ export class FormService {
     return formDto;
   }
 
-  async getAnswers(id: number): Promise<FormAnswerDto[]> {
-    const models = await this.formAnswersRepo.find({ form: id }, ["answers"]);
+  async getAnswers(user: ControllerUserObject, id: number): Promise<FormAnswerDto[]> {
+    const models = await this.formAnswersRepo.find({ form: id, [user.role.toLowerCase()]: { id: user.id } }, [
+      "answers",
+    ]);
 
     const mapped = models.map(FormAnswerDto.from);
     for (let i = 0; i < mapped.length; i++) {
@@ -55,8 +64,12 @@ export class FormService {
     return mapped;
   }
 
-  async getAnswer(id: number): Promise<FormAnswerDto> {
+  async getAnswer(user: ControllerUserObject, id: number): Promise<FormAnswerDto> {
     const model = await this.formAnswersRepo.findOneOrFail({ id }, ["answers"]);
+    const person = await this.getPerson(user);
+
+    if (user.role === "STUDENT" && !itItTheirFormAnswer(person, model))
+      throw new PermissionDeniedException("The students can only see their form answers.");
 
     const dto = FormAnswerDto.from(model);
     model.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
@@ -64,13 +77,16 @@ export class FormService {
     return dto;
   }
 
-  async answer(userId: number, id: number, data: CreateFormAnswerRequest): Promise<FormAnswerDto> {
-    // TODO: validate data
-    const student = await this.studentsRepo.findOneOrFail({ id: userId });
+  async answer(user: ControllerUserObject, id: number, data: CreateFormAnswerRequest): Promise<FormAnswerDto> {
+    const person = await this.getPerson(user);
     const form = await this.formsRepo.findOneOrFail({ id: id }, ["form_fields"]);
+
+    if (!hasAccessToAnswerForm(person, form))
+      throw new PermissionDeniedException("The user is not subject of the given form.");
+
     const fields = form.form_fields.getItems();
 
-    const answer = new FormAnswer(form, student);
+    const answer = new FormAnswer(form, person);
     data.fields.forEach(({ id, value }) =>
       answer.answers.add(
         new FormAnswerField(
@@ -89,8 +105,11 @@ export class FormService {
     return dto;
   }
 
-  async updateAnswer(userId: number, id: number, data: CreateFormAnswerRequest): Promise<FormAnswerDto> {
-    const formAnswer = await this.formAnswersRepo.findOneOrFail({ id: id, student: { id: userId } }, ["answers"]);
+  async updateAnswer(user: ControllerUserObject, id: number, data: CreateFormAnswerRequest): Promise<FormAnswerDto> {
+    const formAnswer = await this.formAnswersRepo.findOneOrFail(
+      { id: id, [user.role.toLowerCase()]: { id: user.id } },
+      ["answers"],
+    );
     const fields = formAnswer.answers.get();
 
     data.fields.forEach((field) => (fields.find((f) => f.id == field.id).value = field.value));
@@ -101,5 +120,18 @@ export class FormService {
     formAnswer.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
 
     return dto;
+  }
+
+  private async getPerson(user: ControllerUserObject): Promise<Student | Academician | InstuteMember> {
+    switch (user.role) {
+      case "STUDENT":
+        return await this.studentsRepo.findOneOrFail({ id: user.id });
+      case "ACADEMICIAN":
+        return await this.academicanRepo.findOneOrFail({ id: user.id });
+      case "INSTITUTE_MEMBER":
+        return await this.instuteMemberRepo.findOneOrFail({ id: user.id });
+      default:
+        return Promise.reject(new Error("Invalid user role."));
+    }
   }
 }
