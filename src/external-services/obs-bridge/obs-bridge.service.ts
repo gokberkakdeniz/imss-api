@@ -1,5 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { StudentInformationSystemBridge, SISBUserResult, SISBUser } from "../../external-services/obs-bridge";
+import {
+  StudentInformationSystemBridge,
+  SISBUserResult,
+  SISBUser,
+  SISBGradeResult,
+} from "../../external-services/obs-bridge";
 
 import users from "../../data/users";
 import { SISBDepartment, SISBUsersResult } from "./obs-bridge.types";
@@ -50,5 +55,22 @@ export class ObsBridgeService implements StudentInformationSystemBridge {
 
   getAcademicansOfDepartment(department: SISBDepartment): Promise<SISBUsersResult> {
     return this.getUsers((user) => user.role === "ACADEMICIAN" && user.department === department);
+  }
+
+  async getStudetGradeInformation(id: number): Promise<SISBGradeResult> {
+    const student = await this.getUser((user) => user.id === id);
+
+    if (student.success) {
+      const gpa = student.data.gpa;
+      return Promise.resolve({
+        success: true,
+        data: gpa,
+      });
+    }
+
+    return Promise.resolve({
+      success: false,
+      error: student.error,
+    });
   }
 }

@@ -8,6 +8,7 @@ export interface SISBUser {
   surname: string;
   department?: SISBDepartment;
   email: string;
+  gpa?: number;
 }
 
 export interface SISBResult<T> {
@@ -19,7 +20,7 @@ export interface SISBResult<T> {
 export type SISBDepartment = "CENG";
 
 export type SISBUserDto = Omit<SISBUser, "password">;
-
+export type SISBGradeResult = SISBResult<number>;
 export type SISBUserResult = SISBResult<SISBUserDto>;
 export type SISBUsersResult = SISBResult<SISBUserDto[]>;
 

@@ -60,6 +60,7 @@ const users: SISBUser[] = [
     surname: "Akdeniz",
     department: "CENG",
     email: "NULL",
+    gpa: 4.0,
   },
   {
     id: 7,
@@ -70,6 +71,7 @@ const users: SISBUser[] = [
     surname: "Alp",
     department: "CENG",
     email: "NULL",
+    gpa: 3.3,
   },
   {
     id: 8,
@@ -80,6 +82,7 @@ const users: SISBUser[] = [
     surname: "Demiray",
     department: "CENG",
     email: "NULL",
+    gpa: 3.09,
   },
   {
     id: 9,
@@ -90,6 +93,7 @@ const users: SISBUser[] = [
     surname: "Günenç",
     department: "CENG",
     email: "NULL",
+    gpa: 3.1,
   },
   {
     id: 10,
@@ -100,6 +104,7 @@ const users: SISBUser[] = [
     surname: "Tutumlu",
     department: "CENG",
     email: "NULL",
+    gpa: 3.5,
   },
   {
     id: 11,
