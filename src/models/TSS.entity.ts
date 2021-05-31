@@ -11,6 +11,9 @@ export class TSS {
   date: Date;
 
   @Property()
+  place: string;
+
+  @Property()
   plagiarism_rate: number;
 
   @OneToOne()
@@ -18,4 +21,12 @@ export class TSS {
 
   @ManyToMany()
   juries = new Collection<Academician>(this);
+
+  constructor(date: Date, place: string, plagiarism_rate: number, student: Student, juries: Academician[]) {
+    this.date = date;
+    this.place = place;
+    this.plagiarism_rate = plagiarism_rate;
+    this.student = student;
+    juries.forEach((jury) => this.juries.add(jury));
+  }
 }
