@@ -61,6 +61,7 @@ const users: SISBUser[] = [
     department: "CENG",
     email: "NULL",
     gpa: 4.0,
+    semester: 4,
   },
   {
     id: 7,
@@ -72,6 +73,7 @@ const users: SISBUser[] = [
     department: "CENG",
     email: "NULL",
     gpa: 3.3,
+    semester: 4,
   },
   {
     id: 8,
@@ -83,6 +85,7 @@ const users: SISBUser[] = [
     department: "CENG",
     email: "NULL",
     gpa: 3.09,
+    semester: 4,
   },
   {
     id: 9,
@@ -94,6 +97,7 @@ const users: SISBUser[] = [
     department: "CENG",
     email: "NULL",
     gpa: 3.1,
+    semester: 4,
   },
   {
     id: 10,
@@ -105,6 +109,7 @@ const users: SISBUser[] = [
     department: "CENG",
     email: "NULL",
     gpa: 3.5,
+    semester: 4,
   },
   {
     id: 11,
