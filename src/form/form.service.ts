@@ -85,6 +85,14 @@ export class FormService {
     if (!this.validator.hasAccessToAnswerForm(person, form))
       throw new PermissionDeniedException("The user is not subject of the given form.");
 
+    if (person instanceof Student) {
+      if (this.validator.isPreviousStepsDone(person, form)) {
+        person.step_no += 1;
+      } else {
+        throw new PermissionDeniedException("The previous steps should be completed.");
+      }
+    }
+
     const fields = form.form_fields.getItems();
 
     const answer = new FormAnswer(form, person);

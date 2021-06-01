@@ -16,6 +16,10 @@ export class ThesisValidator {
     return studentAsObsUser.data?.department === academicianAsObsUser.data?.department;
   }
 
+  canCreateProposal(student: Student): boolean {
+    return student.step_no === -1;
+  }
+
   canViewProposal(user: ControllerUserObject, proposal: ThesisTopicProposal): boolean {
     return (
       user.role === "INSTITUTE_MEMBER" ||

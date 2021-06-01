@@ -2,7 +2,7 @@ import { EntityRepository } from "@mikro-orm/core";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
 import { ControllerUserObject } from "auth/strategies/jwt.strategy";
-import { PermissionDeniedException } from "../exceptions";
+import { IllegalStateException, PermissionDeniedException } from "../exceptions";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { ThesisTopicProposal, ThesisTopicProposalState } from "../models/ThesisTopicProposal.entity";
@@ -25,6 +25,9 @@ export class ThesisService {
 
     const student = await this.studentsRepo.findOneOrFail({ id: user.id });
     const advisor = await this.academiciansRepo.findOneOrFail({ id: advisor_id });
+
+    if (!this.validator.canCreateProposal(student))
+      throw new IllegalStateException("The student cannot create a proposal if they have accepted proposal.");
 
     if (!this.validator.memberOfSameDepartment(student, advisor))
       throw new PermissionDeniedException("The student and advisor must be in the same department.");
@@ -92,7 +95,7 @@ export class ThesisService {
     id: number,
     data: UpdateThesisStatusRequest,
   ): Promise<ThesisTopicProposalDto> {
-    const proposal = await this.thesesRepo.findOneOrFail({ id });
+    const proposal = await this.thesesRepo.findOneOrFail({ id }, ["student"]);
 
     if (!this.validator.canUpdateStatus(user, proposal))
       throw new PermissionDeniedException("Only proposed advisor can update the status of thesis topic proposal.");
@@ -101,6 +104,7 @@ export class ThesisService {
       proposal.status = ThesisTopicProposalState.ACCEPTED;
     } else {
       proposal.status = ThesisTopicProposalState.REJECTED;
+      proposal.student.step_no += 1;
     }
 
     this.thesesRepo.flush();

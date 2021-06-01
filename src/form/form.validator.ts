@@ -19,4 +19,8 @@ export class FormValidator {
 
     return formAnswerSender.id == person.id && formAnswerSender.obs_user_id === person.obs_user_id;
   }
+
+  isPreviousStepsDone(person: Student, form: Form): boolean {
+    return person.step_no + 1 === form.id;
+  }
 }
