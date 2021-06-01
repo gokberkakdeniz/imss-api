@@ -101,8 +101,8 @@ export class ThesisService {
       throw new PermissionDeniedException("Only proposed advisor can update the status of thesis topic proposal.");
 
     if (data.accept) {
+      if (proposal.status === ThesisTopicProposalState.WAITING) proposal.student.step_no += 1;
       proposal.status = ThesisTopicProposalState.ACCEPTED;
-      proposal.student.step_no += 1;
     } else {
       proposal.status = ThesisTopicProposalState.REJECTED;
     }

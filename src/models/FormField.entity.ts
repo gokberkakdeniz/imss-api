@@ -8,6 +8,7 @@ export enum FormFieldType {
   SELECT = 2,
   DATE = 3,
   RADIO = 4,
+  HIDDEN_STUDENT_ID = 9999,
 }
 @Entity()
 export class FormField {

@@ -6,6 +6,7 @@ export enum ThesisTopicProposalState {
   WAITING = 0,
   ACCEPTED = 1,
   REJECTED = 2,
+  FINISHED = 3,
 }
 
 @Entity()

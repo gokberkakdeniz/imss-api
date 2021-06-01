@@ -12,6 +12,7 @@ import { Academician } from "../models/Academician.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
 import { ControllerUserObject } from "auth/strategies/jwt.strategy";
 import { FormValidator } from "./form.validator";
+import { ThesisTopicProposalState } from "../models/ThesisTopicProposal.entity";
 
 @Injectable()
 export class FormService {
@@ -85,13 +86,8 @@ export class FormService {
     if (!this.validator.hasAccessToAnswerForm(person, form))
       throw new PermissionDeniedException("The user is not subject of the given form.");
 
-    if (person instanceof Student) {
-      if (this.validator.isPreviousStepsDone(person, form)) {
-        person.step_no += 1;
-      } else {
-        throw new PermissionDeniedException("The previous steps should be completed.");
-      }
-    }
+    if (person instanceof Student && !this.validator.isPreviousStepsDone(person, form))
+      throw new PermissionDeniedException("The previous steps should be completed.");
 
     const fields = form.form_fields.getItems();
 
@@ -106,7 +102,22 @@ export class FormService {
       ),
     );
 
+    const studentIdField = fields.find((f) => f.type === 9999);
+    if (studentIdField) {
+      const studentIdAnswer = data.fields.find((f) => f.id === studentIdField.id);
+      if (studentIdAnswer) {
+        const student = await this.studentsRepo.findOneOrFail(Number(studentIdAnswer.value), ["proposes"]);
+        if (form.id == 1) {
+          const proposal = student.proposes.getItems().find((p) => p.advisor.id === person.id);
+          if (proposal) proposal.status = ThesisTopicProposalState.FINISHED;
+        }
+        student.step_no += 1;
+        this.studentsRepo.persist(student);
+      }
+    }
+
     await this.formsRepo.persistAndFlush(answer);
+    this.studentsRepo.persist(person);
 
     const dto = FormAnswerDto.from(answer);
     answer.answers.getItems().forEach((af) => dto.fields.push(FormAnswerFieldDto.from(af)));
