@@ -138,6 +138,8 @@ const users: SISBUser[] = [
     surname: "swagger",
     department: "CENG",
     email: "student-test-1@imss.anonaddy.me",
+    gpa: 3.5,
+    semester: 4,
   },
 ];
 

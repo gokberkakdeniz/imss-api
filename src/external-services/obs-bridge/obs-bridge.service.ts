@@ -79,11 +79,12 @@ export class ObsBridgeService implements StudentInformationSystemBridge {
       const course = await this.getCourse((course) => course.id === grades[i].courseId);
       if (course.success) {
         if (grades[i].grade >= 2) allCredits += course.data.credit;
+      } else {
+        return Promise.resolve({
+          success: false,
+          error: "Problem occured while getting course credit",
+        });
       }
-      return Promise.resolve({
-        success: false,
-        error: "Problem occured while getting course credit",
-      });
     }
 
     return Promise.resolve({
@@ -149,7 +150,6 @@ export class ObsBridgeService implements StudentInformationSystemBridge {
         error: "Student is not end of the 4th semester",
       });
     }
-
     if (student.data.gpa < 3) {
       return Promise.resolve({
         success: false,
@@ -157,7 +157,6 @@ export class ObsBridgeService implements StudentInformationSystemBridge {
         error: "Student's gpa is lower than 3",
       });
     }
-
     const grades = await this.getGrades((grade) => grade.userId === id);
     if (!grades.success) {
       return Promise.resolve({
@@ -172,10 +171,9 @@ export class ObsBridgeService implements StudentInformationSystemBridge {
       return Promise.resolve({
         success: false,
         data: false,
-        error: grades.error,
+        error: credits.error,
       });
     }
-
     if (credits.data < 21) {
       return Promise.resolve({
         success: false,
@@ -183,9 +181,7 @@ export class ObsBridgeService implements StudentInformationSystemBridge {
         error: "Student does not have enough credit",
       });
     }
-
     const consecutive = this.checkConsecutiveGrades(grades.data);
-
     if (consecutive) {
       return Promise.resolve({
         success: false,

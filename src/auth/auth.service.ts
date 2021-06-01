@@ -7,10 +7,8 @@ import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
 import { ObsBridgeService, SISBRole, SISBUserResult } from "../external-services/obs-bridge";
-import { GetStudentStatusResponse, LoginResponse } from "./dto";
+import { LoginResponse } from "./dto";
 import { MailService } from "../mail/mail.service";
-import { ControllerUserObject } from "./strategies/jwt.strategy";
-import { steps } from "./types";
 
 export interface JwtPayload {
   sub: number;
@@ -27,8 +25,6 @@ export class AuthService {
     @InjectRepository(Student) private readonly studentsRepo: EntityRepository<Student>,
     @InjectRepository(InstuteMember) private readonly instuteMemberRepo: EntityRepository<InstuteMember>,
   ) {}
-
-  #steps = steps;
 
   async validateUser(username: string, password: string): Promise<SISBUserResult> {
     const result = await this.obsBridgeService.getUserByCrediantals(username, password);
@@ -66,15 +62,5 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
       user,
     };
-  }
-
-  async getStudentStatus(user: ControllerUserObject): Promise<GetStudentStatusResponse> {
-    const student = await this.studentsRepo.findOneOrFail(user.id);
-
-    const done = this.#steps[student.step_no] || null;
-    const current = this.#steps[student.step_no + 1] || null;
-    const next = this.#steps[student.step_no + 2] || null;
-
-    return new GetStudentStatusResponse(done, current, next);
   }
 }

@@ -3,10 +3,10 @@ import { ApiOperation, ApiTags, ApiResponse, ApiBody, ApiOAuth2 } from "@nestjs/
 import { ObsBridgeService, SISBUser, SISBUserResult } from "../external-services/obs-bridge";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
-import { Public, Roles } from "./decorators";
+import { Public } from "./decorators";
 import { Request } from "express";
 
-import { GetProfileResponse, GetStudentStatusResponse, LoginRequest, LoginResponse } from "./dto";
+import { GetProfileResponse, LoginRequest, LoginResponse } from "./dto";
 
 @ApiTags("auth")
 @ApiOAuth2([])
@@ -40,20 +40,5 @@ export class AuthController {
   async getProfile(@Req() req: Request): Promise<Omit<SISBUser, "password">> {
     const { data } = await this.obsBridgeService.getUserById(req.user.id);
     return data;
-  }
-
-  @Get("status")
-  @Roles("STUDENT")
-  @ApiOperation({
-    summary: "Get students status",
-  })
-  @ApiResponse({
-    status: 200,
-    description: "Student status",
-    type: GetStudentStatusResponse,
-  })
-  async getStudentStatus(@Req() req: Request): Promise<GetStudentStatusResponse> {
-    const status = await this.authService.getStudentStatus(req.user);
-    return status;
   }
 }

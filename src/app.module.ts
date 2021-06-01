@@ -10,6 +10,7 @@ import config from "./mikro-orm.config";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { ExceptionInterceptor } from "./interceptors";
 import { ObsBridgeModule } from "./external-services/obs-bridge/obs-bridge.module";
+import { StudentModule } from "./student/student.module";
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ObsBridgeModule } from "./external-services/obs-bridge/obs-bridge.modul
     AcademicansModule,
     MailModule,
     ObsBridgeModule,
+    StudentModule,
   ],
   controllers: [],
   providers: [
