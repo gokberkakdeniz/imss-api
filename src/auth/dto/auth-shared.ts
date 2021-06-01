@@ -19,4 +19,16 @@ export class UserDetailsObject {
 
   @ApiProperty()
   surname: string;
+
+  @ApiProperty()
+  email: string;
+
+  @ApiProperty()
+  department?: string;
+
+  @ApiProperty()
+  gpa?: number;
+
+  @ApiProperty()
+  semester?: number;
 }

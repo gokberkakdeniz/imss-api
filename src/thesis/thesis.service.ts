@@ -102,9 +102,9 @@ export class ThesisService {
 
     if (data.accept) {
       proposal.status = ThesisTopicProposalState.ACCEPTED;
+      proposal.student.step_no += 1;
     } else {
       proposal.status = ThesisTopicProposalState.REJECTED;
-      proposal.student.step_no += 1;
     }
 
     this.thesesRepo.flush();

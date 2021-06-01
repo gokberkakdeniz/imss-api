@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Req, UseGuards } from "@nestjs/common";
 import { ApiOperation, ApiTags, ApiResponse, ApiBody, ApiOAuth2 } from "@nestjs/swagger";
-import { ObsBridgeService, SISBUser, SISBUserResult } from "../external-services/obs-bridge";
+import { SISBUser, SISBUserResult } from "../external-services/obs-bridge";
 import { AuthService } from "./auth.service";
 import { LocalAuthGuard } from "./guards/local-auth.guard";
 import { Public } from "./decorators";
@@ -12,7 +12,7 @@ import { GetProfileResponse, LoginRequest, LoginResponse } from "./dto";
 @ApiOAuth2([])
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService, private obsBridgeService: ObsBridgeService) {}
+  constructor(private authService: AuthService) {}
 
   @Post("login")
   @Public()
@@ -38,7 +38,7 @@ export class AuthController {
     type: GetProfileResponse,
   })
   async getProfile(@Req() req: Request): Promise<Omit<SISBUser, "password">> {
-    const { data } = await this.obsBridgeService.getUserById(req.user.id);
+    const data = await this.authService.getUserById(req.user);
     return data;
   }
 }
