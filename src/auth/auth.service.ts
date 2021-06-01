@@ -6,9 +6,8 @@ import { JwtService } from "@nestjs/jwt";
 import { Academician } from "../models/Academician.entity";
 import { Student } from "../models/Student.entity";
 import { InstuteMember } from "../models/InstuteMember.entity";
-import { ObsBridgeService, SISBRole, SISBUserResult } from "../external-services/obs-bridge";
+import { ObsBridgeService, SISBRole, SISBUser, SISBUserResult } from "../external-services/obs-bridge";
 import { GetStudentStatusResponse, LoginResponse } from "./dto";
-import { MailService } from "../mail/mail.service";
 import { ControllerUserObject } from "./strategies/jwt.strategy";
 import { steps } from "./types";
 
@@ -20,7 +19,6 @@ export interface JwtPayload {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly mailService: MailService,
     private readonly obsBridgeService: ObsBridgeService,
     private readonly jwtService: JwtService,
     @InjectRepository(Academician) private readonly academicansRepo: EntityRepository<Academician>,
@@ -60,8 +58,6 @@ export class AuthService {
   async getToken(user: SISBUserResult["data"]): Promise<LoginResponse> {
     const payload: JwtPayload = { sub: user.id, role: user.role };
 
-    // await this.mailService.sendTestEmail(user);
-
     return {
       access_token: this.jwtService.sign(payload),
       user,
@@ -76,5 +72,29 @@ export class AuthService {
     const next = this.#steps[student.step_no + 2] || null;
 
     return new GetStudentStatusResponse(done, current, next);
+  }
+
+  async getUserById(user: ControllerUserObject): Promise<Omit<SISBUser, "password">> {
+    let person: Academician | Student | InstuteMember;
+
+    switch (user.role) {
+      case "ACADEMICIAN":
+        person = await this.academicansRepo.findOneOrFail(user.id);
+        break;
+      case "INSTITUTE_MEMBER":
+        person = await this.instuteMemberRepo.findOneOrFail(user.id);
+        break;
+      case "STUDENT":
+        person = await this.studentsRepo.findOneOrFail(user.id);
+        break;
+      default:
+        throw new Error(
+          `User role is invalid! Expected: ACADEMICIAN, INSTITUTE_MEMBER, or STUDENT. Found: ${user.role}`,
+        );
+    }
+
+    const { data } = await this.obsBridgeService.getUserById(person.obs_user_id);
+
+    return data;
   }
 }
