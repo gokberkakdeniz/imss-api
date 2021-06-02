@@ -11,6 +11,7 @@ import { APP_INTERCEPTOR } from "@nestjs/core";
 import { ExceptionInterceptor } from "./interceptors";
 import { ObsBridgeModule } from "./external-services/obs-bridge/obs-bridge.module";
 import { StudentModule } from "./student/student.module";
+import { TestModule } from './test/test.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { StudentModule } from "./student/student.module";
     MailModule,
     ObsBridgeModule,
     StudentModule,
+    TestModule,
   ],
   controllers: [],
   providers: [
